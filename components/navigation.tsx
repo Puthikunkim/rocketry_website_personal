@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from 'next/navigation';
 import Link from "next/link";
 import BurgerMenu from "./ui/burger-menu";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const pathname = usePathname();
+  const isHome = pathname === '/';
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -30,6 +34,12 @@ export default function Navigation() {
           {/* Desktop nav */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
+              <Link
+                href="/"
+                aria-current={isHome ? 'page' : undefined}
+                className={`underline-animate px-4 py-2 rounded-none text-sm font-medium transition-colors uppercase ${isHome ? 'text-primary' : 'text-text-main hover:text-primary'}`}>
+                HOME
+              </Link>
               <Link
                 href="/about"
                 className="underline-animate text-text-main hover:text-primary px-4 py-2 rounded-none text-sm font-medium transition-colors uppercase">
@@ -87,6 +97,9 @@ export default function Navigation() {
             <div className="px-2 pt-2 pb-3 space-y-4 sm:px-3 bg-surface border-t border-surface">
               {/* Links row - centered */}
               <div className="flex flex-wrap justify-center items-center gap-4">
+                <Link href="/" aria-current={isHome ? 'page' : undefined} className={`underline-animate px-3 py-2 rounded-none text-sm font-medium uppercase text-center ${isHome ? 'text-primary' : 'text-text-main hover:text-primary'}`} onClick={() => setIsMenuOpen(false)}>
+                  HOME
+                </Link>
                 <Link href="/about" className="underline-animate text-text-main hover:text-primary px-3 py-2 rounded-none text-sm font-medium uppercase text-center" onClick={() => setIsMenuOpen(false)}>
                   ABOUT
                 </Link>

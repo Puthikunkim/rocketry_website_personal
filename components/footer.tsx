@@ -30,6 +30,11 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-4 text-primary text-shadow-lg">Quick Links</h4>
             <ul className="space-y-2 text-left">
               <li>
+                <Link href="/" className="underline-animate text-text-secondary hover:text-primary transition-colors uppercase py-2 rounded-none">
+                  HOME
+                </Link>
+              </li>
+              <li>
                 <Link href="/about" className="underline-animate text-text-secondary hover:text-primary transition-colors uppercase py-2 rounded-none">
                   ABOUT
                 </Link>
