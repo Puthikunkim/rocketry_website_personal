@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Card from "../components/ui/card";
+import QuickNavCard from "../components/QuickNavCard";
 
 
 type Rocket = {
@@ -209,37 +210,31 @@ export default async function HomePage() {
               to offer.
             </p>
           </div>
-          <div className="grid gap-6 grid-cols-1 sm:grid-cols-1 md:grid-cols-3">
-            <Link
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-1 md:grid-cols-4">
+            <QuickNavCard
+              href="/about"
+              icon="ℹ️"
+              title="About"
+              description="Learn about the club and our mission"
+            />
+            <QuickNavCard
               href="/events"
-              className="bg-background rounded-lg p-6 text-center hover:bg-primary/10 transition-all duration-200 border border-accent hover:border-primary"
-            >
-              <div className="text-4xl mb-3">📅</div>
-              <h3 className="text-lg font-bold text-primary mb-2">Events</h3>
-              <p className="text-text-secondary text-sm">
-                Check out upcoming events and competitions
-              </p>
-            </Link>
-            <Link
+              icon="📅"
+              title="Events"
+              description="Check out upcoming events and competitions"
+            />
+            <QuickNavCard
               href="/rockets"
-              className="bg-background rounded-lg p-6 text-center hover:bg-primary/10 transition-all duration-200 border border-accent hover:border-primary"
-            >
-              <div className="text-4xl mb-3">🚀</div>
-              <h3 className="text-lg font-bold text-primary mb-2">Our Rockets</h3>
-              <p className="text-text-secondary text-sm">
-                View our rocket projects and achievements
-              </p>
-            </Link>
-            <Link
+              icon="🚀"
+              title="Our Rockets"
+              description="View our rocket projects and achievements"
+            />
+            <QuickNavCard
               href="/sponsors"
-              className="bg-background rounded-lg p-6 text-center hover:bg-primary/10 transition-all duration-200 border border-accent hover:border-primary"
-            >
-              <div className="text-4xl mb-3">🤝</div>
-              <h3 className="text-lg font-bold text-primary mb-2">Sponsors</h3>
-              <p className="text-text-secondary text-sm">
-                Meet our generous sponsors
-              </p>
-            </Link>
+              icon="🤝"
+              title="Sponsors"
+              description="Meet our generous sponsors"
+            />
           </div>
         </div>
       </section>
