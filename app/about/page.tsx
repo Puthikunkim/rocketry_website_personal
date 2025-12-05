@@ -1,4 +1,8 @@
 import Link from "next/link";
+import FeatureCard from "../../components/FeatureCard";
+import ExecCard from "../../components/ExecCard";
+import StatCard from "../../components/StatCard";
+import SectionFallback from "../../components/SectionFallback";
 
 export const dynamic = 'force-dynamic';
 
@@ -11,10 +15,56 @@ type Exec = {
 };
 
 export default async function AboutPage() {
-  // Fetch executive team members via API route
+  // Fetch executive team members via API route with error handling
   const origin = process.env.NEXT_PUBLIC_SITE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `http://localhost:${process.env.PORT ?? 3000}`);
-  const res = await fetch(new URL("/api/about", origin).toString(), { cache: "no-store" });
-  const executives: Exec[] = await res.json();
+  let executives: Exec[] = [];
+  let execsError = false;
+
+  // Types for the about payload sections
+  type Feature = { icon?: string; title: string; body?: string; variant?: 'background' | 'surface' };
+  type TeamRole = { title: string; body?: string; bullets?: string[]; variant?: 'background' | 'surface' };
+  type Stat = { value: string; label: string };
+  type AboutPayload = {
+    executives?: Exec[];
+    whatWeDo?: Feature[];
+    journey?: Feature[];
+    teamStructure?: TeamRole[];
+    stats?: Stat[];
+  };
+
+  // Start empty and show section-level fallbacks if missing
+  let whatWeDo: Feature[] = [];
+  let journey: Feature[] = [];
+  let teamStructure: TeamRole[] = [];
+  let stats: Stat[] = [];
+
+  // per-section error flags not needed; rendering uses array presence directly
+
+  try {
+    const res = await fetch(new URL('/api/about', origin).toString(), { cache: 'no-store' });
+    if (!res.ok) {
+      console.error('/api/about returned non-ok status:', res.status, res.statusText);
+      execsError = true;
+    } else {
+      const payload = (await res.json()) as AboutPayload | Exec[];
+      if (Array.isArray(payload)) {
+        executives = payload as Exec[];
+        // If executives present but other sections absent, other sections will render their fallbacks
+      } else {
+        executives = Array.isArray(payload.executives) ? payload.executives : [];
+        whatWeDo = Array.isArray(payload.whatWeDo) ? payload.whatWeDo : [];
+        journey = Array.isArray(payload.journey) ? payload.journey : [];
+        teamStructure = Array.isArray(payload.teamStructure) ? payload.teamStructure : [];
+        stats = Array.isArray(payload.stats) ? payload.stats : [];
+
+        // mark missing execs only; other sections are rendered based on array length
+        execsError = executives.length === 0;
+      }
+    }
+  } catch (err) {
+    console.error('Error fetching /api/about:', err);
+    execsError = true;
+  }
 
   return (
     <main className="min-h-screen bg-background text-text-main pt-20">
@@ -34,29 +84,23 @@ export default async function AboutPage() {
               We offer a variety of activities to help students learn, network, and grow in the field of rocketry
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-background rounded-lg p-6 border border-accent text-center">
-              <div className="text-4xl mb-4">🔧</div>
-              <h3 className="text-xl font-bold text-primary mb-3">Workshops</h3>
-              <p className="text-text-secondary">
-                Hands-on workshops covering rocket design, propulsion systems, and manufacturing techniques. Learn practical skills from experienced members.
-              </p>
+          {whatWeDo.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {whatWeDo.map((w, idx) => (
+                <FeatureCard
+                  key={idx}
+                  icon={w.icon}
+                  title={w.title}
+                  centered={true}
+                  variant={w.variant as "background" | "surface"}
+                >
+                  {w.body}
+                </FeatureCard>
+              ))}
             </div>
-            <div className="bg-background rounded-lg p-6 border border-accent text-center">
-              <div className="text-4xl mb-4">🏭</div>
-              <h3 className="text-xl font-bold text-primary mb-3">Industry Events</h3>
-              <p className="text-text-secondary">
-                Connect with professionals in the aerospace industry through guest lectures, site visits, and networking events with leading companies.
-              </p>
-            </div>
-            <div className="bg-background rounded-lg p-6 border border-accent text-center">
-              <div className="text-4xl mb-4">🎉</div>
-              <h3 className="text-xl font-bold text-primary mb-3">Social Events</h3>
-              <p className="text-text-secondary">
-                Build friendships and team spirit through social gatherings, team building activities, and celebrations of our achievements.
-              </p>
-            </div>
-          </div>
+          ) : (
+            <SectionFallback />
+          )}
         </div>
       </section>
 
@@ -69,29 +113,22 @@ export default async function AboutPage() {
               From humble beginnings to launching rockets that reach new heights
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-surface rounded-lg p-6 border border-accent">
-              <div className="text-4xl mb-4">🚀</div>
-              <h3 className="text-xl font-bold text-primary mb-3">2024 - Foundation</h3>
-              <p className="text-text-secondary">
-                UARC was established by Laura with a vision to bring rocketry to the University of Auckland.
-              </p>
+          {journey.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {journey.map((j, idx) => (
+                <FeatureCard
+                  key={idx}
+                  icon={j.icon}
+                  title={j.title}
+                  variant={j.variant as "background" | "surface"}
+                >
+                  {j.body}
+                </FeatureCard>
+              ))}
             </div>
-            <div className="bg-surface rounded-lg p-6 border border-accent">
-              <div className="text-4xl mb-4">🏆</div>
-              <h3 className="text-xl font-bold text-primary mb-3">2025 - First Launch</h3>
-              <p className="text-text-secondary">
-                Successfully launched our first rocket, marking a major milestone in our club&apos;s history and proving our engineering capabilities.
-              </p>
-            </div>
-            <div className="bg-surface rounded-lg p-6 border border-accent">
-              <div className="text-4xl mb-4">🌟</div>
-              <h3 className="text-xl font-bold text-primary mb-3">2 - Years Active</h3>
-              <p className="text-text-secondary">
-                Continuing to push boundaries with advanced rocket designs, expanded team, and growing influence in the aerospace community.
-              </p>
-            </div>
-          </div>
+          ) : (
+            <SectionFallback />
+          )}
         </div>
       </section>
 
@@ -104,20 +141,15 @@ export default async function AboutPage() {
               Meet the dedicated leaders driving UARC forward with their passion for rocketry and aerospace engineering
             </p>
           </div>
+          {execsError ? (
+            <SectionFallback
+              title="Unable to load executive team"
+              description="We are having trouble fetching the executive team. Please try again later or contact us if the issue persists."
+            />
+          ) : null}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {executives.map((exec: Exec) => (
-              <div key={exec.id} className="bg-background rounded-lg p-6 border border-accent text-center">
-                <div className="mb-4">
-                  <img 
-                    src={exec.photo} 
-                    alt={exec.name}
-                    className="w-32 h-32 rounded-full mx-auto object-cover border-2 border-accent"
-                  />
-                </div>
-                <h3 className="text-xl font-bold text-primary mb-2">{exec.name}</h3>
-                <p className="text-accent font-semibold mb-3">{exec.role}</p>
-                <p className="text-text-secondary text-sm leading-relaxed">{exec.bio}</p>
-              </div>
+              <ExecCard key={exec.id} exec={exec} centered={true} />
             ))}
           </div>
         </div>
@@ -132,24 +164,15 @@ export default async function AboutPage() {
               Milestones that showcase our commitment to excellence in rocketry
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-background rounded-lg p-6 text-center border border-accent">
-              <div className="text-3xl font-bold text-primary mb-2">4+</div>
-              <p className="text-text-secondary">Rockets Launched</p>
+          {stats.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {stats.map((s, idx) => (
+                <StatCard key={idx} value={s.value} label={s.label} centered={true} variant="background" />
+              ))}
             </div>
-            <div className="bg-background rounded-lg p-6 text-center border border-accent">
-              <div className="text-3xl font-bold text-primary mb-2">50+</div>
-              <p className="text-text-secondary">Members</p>
-            </div>
-            <div className="bg-background rounded-lg p-6 text-center border border-accent">
-              <div className="text-3xl font-bold text-primary mb-2">100m+</div>
-              <p className="text-text-secondary">Maximum Altitude</p>
-            </div>
-            <div className="bg-background rounded-lg p-6 text-center border border-accent">
-              <div className="text-3xl font-bold text-primary mb-2">0+</div>
-              <p className="text-text-secondary">Competitions</p>
-            </div>
-          </div>
+          ) : (
+            <SectionFallback />
+          )}
         </div>
       </section>
 
@@ -162,63 +185,22 @@ export default async function AboutPage() {
               Organised teams working together to achieve our rocketry goals
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-surface rounded-lg p-6 border border-accent">
-              <h3 className="text-xl font-bold text-primary mb-4">Ground Station Team</h3>
-              <p className="text-text-secondary mb-4">
-                Manage launch operations, tracking systems, and communication with rockets during flight.
-              </p>
-              <ul className="text-text-secondary text-sm space-y-2">
-                <li>• Launch coordination</li>
-                <li>• Telemetry tracking</li>
-                <li>• Communication systems</li>
-              </ul>
+          {teamStructure.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {teamStructure.map((t, idx) => (
+                <FeatureCard key={idx} title={t.title} variant={t.variant as "surface" | "background"}>
+                  <p className="mb-4">{t.body}</p>
+                  {t.bullets ? (
+                    <ul className="text-text-secondary text-sm space-y-2">
+                      {t.bullets.map((b, i) => <li key={i}>• {b}</li>)}
+                    </ul>
+                  ) : null}
+                </FeatureCard>
+              ))}
             </div>
-            <div className="bg-surface rounded-lg p-6 border border-accent">
-              <h3 className="text-xl font-bold text-primary mb-4">Recovery Team</h3>
-              <p className="text-text-secondary mb-4">
-                Develop parachute systems and recovery mechanisms to safely return rockets to the ground.
-              </p>
-              <ul className="text-text-secondary text-sm space-y-2">
-                <li>• Parachute design</li>
-                <li>• Deployment mechanisms</li>
-                <li>• Landing zone analysis</li>
-              </ul>
-            </div>
-            <div className="bg-surface rounded-lg p-6 border border-accent">
-              <h3 className="text-xl font-bold text-primary mb-4">Structural Team</h3>
-              <p className="text-text-secondary mb-4">
-                Design and manufacture rocket airframes, ensuring structural integrity and aerodynamic efficiency.
-              </p>
-              <ul className="text-text-secondary text-sm space-y-2">
-                <li>• Airframe design</li>
-                <li>• Material selection</li>
-                <li>• Manufacturing processes</li>
-              </ul>
-            </div>
-            <div className="bg-surface rounded-lg p-6 border border-accent">
-              <h3 className="text-xl font-bold text-primary mb-4">Avionics Team</h3>
-              <p className="text-text-secondary mb-4">
-                Handle all electronic systems including flight computers, sensors, and communication systems.
-              </p>
-              <ul className="text-text-secondary text-sm space-y-2">
-                <li>• Flight computer programming</li>
-                <li>• Sensor integration</li>
-                <li>• Telemetry systems</li>
-              </ul>
-            </div>
-            <div className="bg-surface rounded-lg p-6 border border-accent">
-              <h3 className="text-xl font-bold text-primary mb-4">Control Systems Team</h3>
-              <p className="text-text-secondary mb-4">
-                Design and implement guidance, navigation, and control systems for rocket stability and trajectory.
-              </p>
-              <ul className="text-text-secondary text-sm space-y-2">
-                <li>• Guidance algorithms</li>
-                <li>• Navigation systems</li>
-                <li>• Flight control</li>
-              </ul>
-            </div>
-          </div>
+          ) : (
+            <SectionFallback />
+          )}
         </div>
       </section>
 

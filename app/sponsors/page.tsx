@@ -23,7 +23,7 @@ export default async function SponsorsPage() {
     if (res.ok) sponsors = await res.json();
     else console.warn("Failed to load sponsors from API:", await res.text());
   } catch (e) {
-    console.warn("⚠️  Could not load sponsors from API:", (e as Error).message);
+    console.warn("Could not load sponsors from API:", (e as Error).message);
   }
 
   // group by sponsor.tier
