@@ -45,3 +45,33 @@ model Sponsor {
   description String
   tier        String  @default("BRONZE")
 }
+
+model WhatWeDo {
+  id     Int    @id @default(autoincrement())
+  icon   String?
+  title  String @unique
+  body   String
+  variant String @default("background")
+}
+
+model JourneyItem {
+  id     Int    @id @default(autoincrement())
+  icon   String?
+  title  String @unique
+  body   String
+  variant String @default("surface")
+}
+
+model TeamRole {
+  id     Int    @id @default(autoincrement())
+  title  String @unique
+  body   String
+  bullets String[] @default([])
+  variant String @default("surface")
+}
+
+model Stat {
+  id    Int    @id @default(autoincrement())
+  value String
+  label String @unique
+}
