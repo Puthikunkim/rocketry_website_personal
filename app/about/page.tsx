@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from 'next/image';
 import FeatureCard from "../../components/FeatureCard";
 import ExecCard from "../../components/ExecCard";
 import StatCard from "../../components/StatCard";
@@ -38,8 +39,6 @@ export default async function AboutPage() {
   let teamStructure: TeamRole[] = [];
   let stats: Stat[] = [];
 
-  // per-section error flags not needed; rendering uses array presence directly
-
   try {
     const res = await fetch(new URL('/api/about', origin).toString(), { cache: 'no-store' });
     if (!res.ok) {
@@ -49,7 +48,6 @@ export default async function AboutPage() {
       const payload = (await res.json()) as AboutPayload | Exec[];
       if (Array.isArray(payload)) {
         executives = payload as Exec[];
-        // If executives present but other sections absent, other sections will render their fallbacks
       } else {
         executives = Array.isArray(payload.executives) ? payload.executives : [];
         whatWeDo = Array.isArray(payload.whatWeDo) ? payload.whatWeDo : [];
@@ -57,7 +55,6 @@ export default async function AboutPage() {
         teamStructure = Array.isArray(payload.teamStructure) ? payload.teamStructure : [];
         stats = Array.isArray(payload.stats) ? payload.stats : [];
 
-        // mark missing execs only; other sections are rendered based on array length
         execsError = executives.length === 0;
       }
     }
@@ -66,12 +63,31 @@ export default async function AboutPage() {
     execsError = true;
   }
 
+  const SUPABASE_STORAGE_BASE = process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL || 'https://vokbajuauijnfzenzlye.supabase.co/storage/v1/object/public';
+  const TEAM_IMAGE_PATH = 'images/execs/exec_team.jpg';
+  const encodePath = (p: string) => p.split('/').map(encodeURIComponent).join('/');
+  const teamImageUrl = `${SUPABASE_STORAGE_BASE.replace(/\/$/, '')}/${encodePath(TEAM_IMAGE_PATH)}`;
+
   return (
     <main className="min-h-screen bg-background text-text-main pt-20">
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center py-24 px-4 bg-background relative overflow-hidden">
-        <div className="relative z-10 max-w-4xl mx-auto">
-          <img src="" alt="UARC Team" className="rounded-xl shadow-2xl w-full max-w-3xl mx-auto"/>
+      <section className="flex flex-col items-center justify-center text-center pb-24 px-4 bg-background relative overflow-hidden">
+        <div className="relative z-10 w-full mx-auto">
+          {teamImageUrl ? (
+            <div className="rounded-xl shadow-2xl w-3/4 mx-auto overflow-hidden px-4 sm:px-6 lg:px-8">
+              <Image
+                src={teamImageUrl}
+                alt="UARC Team"
+                width={2160}
+                height={1215}
+                sizes="(max-width: 1024px) 75vw, 800px" 
+                priority
+                className="w-full h-auto object-cover max-w-none rounded-xl"
+              />
+            </div>
+          ) : (
+            <div className="rounded-xl shadow-2xl w-3/4 mx-auto bg-gray-800 h-72 px-4 sm:px-6 lg:px-8" />
+          )}
         </div>
       </section>
 
