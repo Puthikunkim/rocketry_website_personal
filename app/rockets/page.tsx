@@ -1,70 +1,64 @@
-import Card from '../../components/ui/card';
-import Link from 'next/link';
+import Card from "../../components/ui/card";
+import SectionFallback from "../../components/SectionFallback";
+import SectionSeparator from "../../components/SectionSeparator";
+import Link from "next/link";
+import { getRocketSummaries, type RocketSummary } from "@/lib/site-data";
 
-type RocketItem = {
-  id: number;
-  name: string;
-  slug: string;
-  image?: string | null;
-  description?: string | null;
-  launchedAt?: string | null;
-};
+type RocketItem = RocketSummary;
 
 export default async function RocketsPage() {
   let rockets: RocketItem[] = [];
-  
+
   try {
-    const base = process.env.NEXT_PUBLIC_BASE_URL ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `http://localhost:${process.env.PORT ?? 3000}`);
-    const res = await fetch(new URL('/api/rockets', base).toString(), { 
-      cache: 'no-store',
-      headers: {
-        'Cache-Control': 'no-cache',
-      }
-    });
-
-    if (res.ok) {
-      rockets = await res.json();
-    } else {
-      console.error('Failed to load rockets from API:', await res.text());
-    }
+    rockets = await getRocketSummaries();
   } catch (error) {
-    console.error('Error fetching rockets:', error);
-  }
-
-  if (rockets.length === 0) {
-    return (
-      <main className="min-h-screen max-w-7xl mx-auto pb-16">
-        <section className="max-w-7xl mx-auto pt-16 pb-8 px-4 text-left">
-          <h1 className="text-5xl font-extrabold mb-4 text-primary">Our Rockets</h1>
-          <p className="text-lg text-text-secondary max-w-2xl">
-            No rockets available at the moment. Check back soon!
-          </p>
-        </section>
-      </main>
-    );
+    console.error("Error fetching rockets:", error);
   }
 
   return (
-    <main className="min-h-screen max-w-7xl mx-auto pb-16">
-      <section className="max-w-7xl mx-auto pt-16 pb-8 px-4 text-left">
-        <h1 className="text-5xl font-extrabold mb-4 text-primary">Our Rockets</h1>
-        <p className="text-lg text-text-secondary max-w-2xl">
-          Explore our rocket projects and achievements!
-        </p>
+    <main className="min-h-screen bg-background pb-16 text-text-main">
+      <section className="bg-background pt-16 pb-8 px-4">
+        <div className="max-w-7xl mx-auto text-left">
+          <h1 className="text-5xl font-extrabold mb-4 text-primary">
+            Our Rockets
+          </h1>
+          <p className="text-lg text-text-secondary max-w-2xl">
+            Explore our rocket projects and achievements!
+          </p>
+        </div>
       </section>
-      <div className="grid grid-cols-1 gap-8">
-        {rockets.map((rocket: RocketItem, idx: number) => (
-          <Link key={rocket.id} href={`/rockets/${rocket.slug}`} className="block h-full">
-            <Card
-              image={rocket.image ?? ''}
-              title={rocket.name}
-              date={rocket.launchedAt ? new Date(rocket.launchedAt).toLocaleDateString() : 'TBA'}
-              description={rocket.description ?? ''}
-              reverse={idx % 2 === 1}
-            />
-          </Link>
-        ))}
-      </div>
+
+      <SectionSeparator variant={1} />
+
+      <section className="bg-surface py-16 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 gap-8">
+            {rockets.length === 0 ? (
+              <SectionFallback align="left" />
+            ) : (
+              rockets.map((rocket: RocketItem, idx: number) => (
+                <Link
+                  key={rocket.id}
+                  href={`/rockets/${rocket.slug}`}
+                  className="block h-full"
+                >
+                  <Card
+                    image={rocket.image ?? ""}
+                    title={rocket.name}
+                    date={
+                      rocket.launchedAt
+                        ? new Date(rocket.launchedAt).toLocaleDateString()
+                        : "TBA"
+                    }
+                    description={rocket.description ?? ""}
+                    reverse={idx % 2 === 1}
+                  />
+                </Link>
+              ))
+            )}
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

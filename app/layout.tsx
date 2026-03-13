@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
+import ScrollToTop from "@/components/ScrollToTop";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -18,18 +19,29 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "University of Auckland Rocketry Club",
-  description: "Student-led rocketry club dedicated to designing, building, and launching rockets. Join us in exploring aerospace engineering and space exploration.",
-  keywords: ["rocketry", "aerospace", "engineering", "university of auckland", "rockets", "space"],
+  description:
+    "Student-led rocketry club dedicated to designing, building, and launching rockets. Join us in exploring aerospace engineering and space exploration.",
+  keywords: [
+    "rocketry",
+    "aerospace",
+    "engineering",
+    "university of auckland",
+    "rockets",
+    "space",
+  ],
 };
 
-export default function RootLayout({ children, }: Readonly<{ children: React.ReactNode; }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body
         className={`dark ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navigation />
-        <main className="pt-16 min-h-screen mt-16 mb-16">
+        <ScrollToTop />
+        <main className="relative pt-16 min-h-screen mt-16 mb-16">
           {children}
         </main>
         <Footer />

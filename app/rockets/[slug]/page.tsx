@@ -1,38 +1,51 @@
-import Link from 'next/link';
-import { notFound } from 'next/navigation'
+import Link from "next/link";
+// import { notFound } from "next/navigation";
+import SectionFallback from "@/components/SectionFallback";
+import { getRocketBySlug } from "@/lib/site-data";
 
 interface RocketPageProps {
-  readonly params: Promise<{ slug: string }>
+  readonly params: Promise<{ slug: string }>;
 }
 
 export default async function RocketPage({ params }: RocketPageProps) {
   // await the params promise to pull out slug
-  const { slug } = await params
+  const { slug } = await params;
+  let rocket = null;
+  const rocketImageSrc = (image?: string | null) => image ?? "";
 
-  const base = process.env.NEXT_PUBLIC_BASE_URL ?? (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `http://localhost:${process.env.PORT ?? 3000}`);
-  const res = await fetch(new URL(`/api/rockets/${slug}`, base).toString(), { cache: 'no-store' });
-
-  if (!res.ok) {
-    // if 404, show notFound
-    if (res.status === 404) return notFound();
-    console.error('Failed to load rocket from API:', await res.text());
-    return notFound();
+  try {
+    rocket = await getRocketBySlug(slug);
+  } catch (error) {
+    console.error("Failed to load rocket:", error);
   }
 
-  const rocket = await res.json();
-
   if (!rocket) {
-    notFound()
+    return (
+      <main className="min-h-screen max-w-7xl mx-auto pb-16">
+        <section className="max-w-7xl mx-auto pt-16 pb-8 px-4">
+          <h1 className="text-5xl font-extrabold mb-4 text-primary">Rocket</h1>
+          <SectionFallback align="left" />
+        </section>
+      </main>
+    );
   }
 
   return (
     <main className="min-h-screen max-w-7xl mx-auto pb-16">
       <section className="max-w-7xl mx-auto pt-16 pb-8 px-4">
+        <div className="mb-6">
+          <Link
+            href="/rockets"
+            className="inline-flex items-center text-primary hover:text-primary/80 transition-colors"
+          >
+            ← Back to all Rockets
+          </Link>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Rocket Image */}
           <div className="relative">
             <img
-              src={rocket.image}
+              src={rocketImageSrc(rocket.image)}
               alt={rocket.name}
               className="w-full h-96 object-cover rounded-lg shadow-lg"
             />
@@ -46,8 +59,7 @@ export default async function RocketPage({ params }: RocketPageProps) {
               </h1>
               {rocket.launchedAt && (
                 <p className="text-lg text-text-secondary mb-4">
-                  Launched:{' '}
-                  {new Date(rocket.launchedAt).toLocaleDateString()}
+                  Launched: {new Date(rocket.launchedAt).toLocaleDateString()}
                 </p>
               )}
             </div>
@@ -60,9 +72,7 @@ export default async function RocketPage({ params }: RocketPageProps) {
 
             {/* Additional Details */}
             <div className="bg-surface rounded-lg p-6 border border-accent">
-              <h3 className="text-xl font-bold text-primary mb-4">
-                Technical Specifications
-              </h3>
+              <h3 className="text-xl font-bold text-primary mb-4">About</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <p className="text-sm text-text-secondary">Rocket Name</p>
@@ -71,41 +81,26 @@ export default async function RocketPage({ params }: RocketPageProps) {
                 <div>
                   <p className="text-sm text-text-secondary">Status</p>
                   <p className="font-semibold">
-                    {rocket.launchedAt ? 'Launched' : 'In Development'}
+                    {rocket.launchedAt ? "Launched" : "In Development"}
                   </p>
                 </div>
                 {rocket.launchedAt && (
                   <div>
-                    <p className="text-sm text-text-secondary">
-                      Launch Date
-                    </p>
+                    <p className="text-sm text-text-secondary">Launch Date</p>
                     <p className="font-semibold">
-                      {new Date(rocket.launchedAt).toLocaleDateString(
-                        'en-US',
-                        {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        }
-                      )}
+                      {new Date(rocket.launchedAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      })}
                     </p>
                   </div>
                 )}
               </div>
             </div>
-
-            {/* Back to Rockets */}
-            <div className="pt-6">
-              <Link
-                href="/rockets"
-                className="inline-flex items-center text-primary hover:text-primary/80 transition-colors"
-              >
-                ← Back to All Rockets
-              </Link>
-            </div>
           </div>
         </div>
       </section>
     </main>
-  )
+  );
 }

@@ -1,11 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import Card from "../components/ui/card";
+import SectionFallback from "../components/SectionFallback";
 import QuickNavCard from "../components/QuickNavCard";
-
+import SectionSeparator from "../components/SectionSeparator";
+import { getEventsOverview, getRocketSummaries } from "@/lib/site-data";
 
 type Rocket = {
-  id: string;
+  id: number;
   name: string;
   slug: string;
   image?: string | null;
@@ -14,7 +16,7 @@ type Rocket = {
 };
 
 type EventItem = {
-  id: string;
+  id: number;
   title: string;
   slug: string;
   description?: string | null;
@@ -26,19 +28,13 @@ export default async function HomePage() {
   let latestEvents: EventItem[] = [];
 
   try {
-    const base =
-      process.env.NEXT_PUBLIC_BASE_URL ??
-      (process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : `http://localhost:${process.env.PORT ?? 3000}`);
-
-    const [rRes, eRes] = await Promise.all([
-      fetch(new URL("/api/rockets", base).toString(), { cache: "no-store" }),
-      fetch(new URL("/api/events", base).toString(), { cache: "no-store" }),
+    const [rockets, events] = await Promise.all([
+      getRocketSummaries(),
+      getEventsOverview(),
     ]);
 
-    if (rRes.ok) featuredRockets = await rRes.json();
-    if (eRes.ok) latestEvents = await eRes.json();
+    featuredRockets = rockets;
+    latestEvents = events.upcoming;
   } catch (err) {
     console.error("Failed to load homepage data", err);
   }
@@ -83,6 +79,8 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <SectionSeparator variant={1} />
+
       {/* Featured Rockets Section */}
       <section className="py-16 px-4 bg-surface">
         <div className="max-w-7xl mx-auto">
@@ -92,32 +90,31 @@ export default async function HomePage() {
               Explore our latest rocket projects and achievements!
             </p>
           </div>
-          <div className="grid grid-cols-1 gap-8">
-            {featuredRockets.length === 0 && (
-              <p className="text-text-secondary text-center">
-                No rockets available at the moment.
-              </p>
-            )}
-            {featuredRockets.map((rocket, idx) => (
-              <Link
-                key={rocket.id}
-                href={`/rockets/${rocket.slug}`}
-                className="block h-full"
-              >
-                <Card
-                  image={rocket.image ?? ""}
-                  title={rocket.name}
-                  date={
-                    rocket.launchedAt
-                      ? new Date(rocket.launchedAt).toLocaleDateString()
-                      : "TBA"
-                  }
-                  description={rocket.description ?? ""}
-                  reverse={idx % 2 === 1}
-                />
-              </Link>
-            ))}
-          </div>
+          {featuredRockets.length === 0 ? (
+            <SectionFallback />
+          ) : (
+            <div className="grid grid-cols-1 gap-8">
+              {featuredRockets.map((rocket, idx) => (
+                <Link
+                  key={rocket.id}
+                  href={`/rockets/${rocket.slug}`}
+                  className="block h-full"
+                >
+                  <Card
+                    image={rocket.image ?? ""}
+                    title={rocket.name}
+                    date={
+                      rocket.launchedAt
+                        ? new Date(rocket.launchedAt).toLocaleDateString()
+                        : "TBA"
+                    }
+                    description={rocket.description ?? ""}
+                    reverse={idx % 2 === 1}
+                  />
+                </Link>
+              ))}
+            </div>
+          )}
           <div className="text-center mt-8">
             <Link
               href="/rockets"
@@ -129,6 +126,8 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <SectionSeparator variant={2} />
+
       {/* Latest Events Section */}
       <section className="py-16 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
@@ -138,28 +137,27 @@ export default async function HomePage() {
               Join our next events and be part of the excitement!
             </p>
           </div>
-          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2">
-            {latestEvents.length === 0 && (
-              <p className="text-text-secondary col-span-2">
-                No upcoming events at the moment. Check back soon!
-              </p>
-            )}
-            {latestEvents.map((event) => (
-              <Link
-                key={event.id}
-                href={`/events/${event.slug}`}
-                className="block h-full"
-              >
-                <Card
-                  image={eventPlaceholder}
-                  title={event.title}
-                  date={new Date(event.date).toLocaleDateString()}
-                  description={event.description ?? ""}
-                  vertical
-                />
-              </Link>
-            ))}
-          </div>
+          {latestEvents.length === 0 ? (
+            <SectionFallback />
+          ) : (
+            <div className="grid gap-8 grid-cols-1 sm:grid-cols-2">
+              {latestEvents.map((event) => (
+                <Link
+                  key={event.id}
+                  href={`/events/${event.slug}`}
+                  className="block h-full"
+                >
+                  <Card
+                    image={eventPlaceholder}
+                    title={event.title}
+                    date={new Date(event.date).toLocaleDateString()}
+                    description={event.description ?? ""}
+                    vertical
+                  />
+                </Link>
+              ))}
+            </div>
+          )}
           <div className="text-center mt-8">
             <Link
               href="/events"
@@ -171,16 +169,18 @@ export default async function HomePage() {
         </div>
       </section>
 
+      <SectionSeparator variant={3} />
+
       {/* Sponsors Section */}
-      <section className="py-16 px-4 bg-background">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center md:items-stretch gap-12">
-          <div className="flex-1 flex flex-col justify-center">
+      <section className="py-16 px-4 bg-surface">
+        <div className="max-w-7xl mx-auto flex items-center justify-center">
+          <div className="flex-1 flex flex-col justify-center items-center text-center">
             <h2 className="text-4xl font-extrabold mb-4">Our Sponsors</h2>
             <p className="text-lg text-text-secondary max-w-2xl">
               We are grateful for the generous support of our sponsors who make
               our rocketry projects possible.
             </p>
-            <div className="text-start mt-8">
+            <div className="mt-8">
               <Link
                 href="/sponsors"
                 className="button bg-primary text-white px-6 py-3 rounded-full font-bold hover:bg-[#a94425] transition-all duration-200"
@@ -189,19 +189,13 @@ export default async function HomePage() {
               </Link>
             </div>
           </div>
-          <div className="flex-1 flex items-center justify-center min-h-[300px] w-full">
-            <img
-              src="/sponsors-placeholder.png"
-              alt="Sponsors Placeholder"
-              className="w-full max-w-md object-contain rounded-xl border border-accent shadow-md bg-white"
-              style={{ minHeight: 200 }}
-            />
-          </div>
         </div>
       </section>
 
+      <SectionSeparator variant={4} />
+
       {/* Quick Navigation Section */}
-      <section className="py-16 px-4 bg-surface">
+      <section className="py-16 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-extrabold mb-4">Explore More</h2>

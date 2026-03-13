@@ -1,15 +1,18 @@
-import prisma from "../../../lib/prisma";
+import { getAboutPayload } from "@/lib/site-data";
 
 export async function GET() {
-  const executives = await prisma.exec.findMany({ orderBy: { order: 'asc' } });
-  const whatWeDo = await prisma.whatWeDo.findMany({ orderBy: { id: 'asc' } }).catch(() => []);
-  const journey = await prisma.journeyItem.findMany({ orderBy: { id: 'asc' } }).catch(() => []);
-  const teamStructure = await prisma.teamRole.findMany({ orderBy: { id: 'asc' } }).catch(() => []);
-  const stats = await prisma.stat.findMany({ orderBy: { id: 'asc' } }).catch(() => []);
+  try {
+    const payload = await getAboutPayload();
 
-  const payload = { executives, whatWeDo, journey, teamStructure, stats };
-  return new Response(JSON.stringify(payload), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  });
+    return new Response(JSON.stringify(payload), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("Error fetching about data:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to fetch about data" }),
+      { status: 500, headers: { "Content-Type": "application/json" } },
+    );
+  }
 }
