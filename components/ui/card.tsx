@@ -5,6 +5,7 @@ interface CardProps {
   readonly title: string;
   readonly date: string;
   readonly description: string;
+  readonly tag?: string | null;
   readonly reverse?: boolean;
   readonly vertical?: boolean;
 }
@@ -14,9 +15,16 @@ export default function Card({
   title,
   date,
   description,
+  tag,
   reverse = false,
   vertical = false,
 }: CardProps) {
+  const trimmedDescription = description.trim();
+  const eventCardDescription =
+    trimmedDescription.length > 0
+      ? `${trimmedDescription} ... see more`
+      : "See more";
+
   if (vertical) {
     return (
       <div
@@ -34,9 +42,23 @@ export default function Card({
               <span className="text-xs" style={{ color: "#C25632" }}>
                 {date}
               </span>
+              {tag ? (
+                <span className="text-[11px] px-2 py-0.5 rounded-full border border-primary/50 text-primary bg-primary/10">
+                  {tag}
+                </span>
+              ) : null}
             </div>
             <h3 className="text-xl font-bold mb-2 !text-white">{title}</h3>
-            <p className="text-text-secondary text-sm mb-4">{description}</p>
+            <p
+              className="text-text-secondary text-sm mb-4 overflow-hidden"
+              style={{
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+              }}
+            >
+              {eventCardDescription}
+            </p>
           </div>
         </div>
       </div>
@@ -63,6 +85,11 @@ export default function Card({
             <span className="text-xs" style={{ color: "#C25632" }}>
               {date}
             </span>
+            {tag ? (
+              <span className="text-[11px] px-2 py-0.5 rounded-full border border-primary/50 text-primary bg-primary/10">
+                {tag}
+              </span>
+            ) : null}
           </div>
           <h3 className="text-xl font-bold mb-2 !text-white">{title}</h3>
           <p className="text-text-secondary text-sm mb-4">{description}</p>

@@ -63,6 +63,11 @@ export default async function EventPage({ params }: EventPageProps) {
                     <h1 className="text-5xl font-extrabold mb-4 text-primary">
                       {event.title}
                     </h1>
+                    <div className="mb-4">
+                      <span className="inline-flex items-center text-xs px-3 py-1 rounded-full border border-primary/50 text-primary bg-primary/10">
+                        {event.eventTag ?? "General"}
+                      </span>
+                    </div>
                     <div className="space-y-2 mb-4 text-sm sm:text-base">
                       <p className="text-text-secondary leading-relaxed">
                         <span className="text-primary font-semibold">

@@ -8,6 +8,16 @@ if (!directUrl) {
 }
 
 const sql = `
+alter table public."Event"
+  add column if not exists "eventTag" text;
+
+update public."Event"
+set "eventTag" = 'General'
+where "eventTag" is null or btrim("eventTag") = '';
+
+alter table public."Event"
+  alter column "eventTag" set default 'General';
+
 grant usage on schema public to anon, authenticated, service_role;
 
 grant select on table

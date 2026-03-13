@@ -1,5 +1,8 @@
-import "server-only";
 import { createClient } from "@supabase/supabase-js";
+
+if (typeof window !== "undefined") {
+  throw new Error("lib/supabase.ts must only be imported on the server.");
+}
 
 const SUPABASE_URL =
   process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;

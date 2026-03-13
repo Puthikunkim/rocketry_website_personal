@@ -21,6 +21,7 @@ type EventItem = {
   slug: string;
   description?: string | null;
   date: string;
+  eventTag?: string | null;
 };
 
 export default async function HomePage() {
@@ -138,7 +139,10 @@ export default async function HomePage() {
             </p>
           </div>
           {latestEvents.length === 0 ? (
-            <SectionFallback />
+            <SectionFallback
+              title="No upcoming events right now"
+              description="We do not have any future events scheduled yet. Check back soon for new workshops, talks, and launch activities."
+            />
           ) : (
             <div className="grid gap-8 grid-cols-1 sm:grid-cols-2">
               {latestEvents.map((event) => (
@@ -151,6 +155,7 @@ export default async function HomePage() {
                     image={eventPlaceholder}
                     title={event.title}
                     date={new Date(event.date).toLocaleDateString()}
+                    tag={event.eventTag ?? "General"}
                     description={event.description ?? ""}
                     vertical
                   />

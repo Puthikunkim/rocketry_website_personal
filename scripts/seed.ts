@@ -11,7 +11,9 @@ type DynamicTableClient = {
       eq: (
         key: string,
         value: unknown,
-      ) => { maybeSingle: () => Promise<{ data: ExistingRow; error: MaybeError }> };
+      ) => {
+        maybeSingle: () => Promise<{ data: ExistingRow; error: MaybeError }>;
+      };
     };
     update: (item: Row) => {
       eq: (key: string, value: unknown) => Promise<{ error: MaybeError }>;
@@ -66,9 +68,7 @@ async function upsertByUnique(table: string, uniqueKey: string, item: Row) {
     return "updated";
   }
 
-  const { error: insertError } = await db
-    .from(table)
-    .insert(item);
+  const { error: insertError } = await db.from(table).insert(item);
   if (insertError) {
     throw new Error(
       `Failed inserting into ${table} by ${uniqueKey}=${String(item[uniqueKey])}: ${insertError.message}`,
@@ -229,52 +229,169 @@ function generateRocketData(count: number) {
   });
 }
 
-function generateEventData(count: number) {
-  const eventTypes = [
-    "Rocketry Workshop",
-    "Launch Day",
-    "Engine Test Session",
-    "Payload Integration Lab",
-    "Industry Networking Night",
-    "Simulation Sprint",
-    "Recovery Drill",
-    "Design Review Forum",
+function generateEventData() {
+  return [
+    {
+      title: "UARC Launch Night 2025",
+      slug: "uarc-launch-night-2025",
+      description:
+        "We are thrilled to invite members to Launch Night, the official kickoff to an exciting year of rocketry at UoA. This is your chance to learn more about the club, meet the exec team, and hear about all the projects, workshops, and launches planned for 2025. Whether you are already a rocketry enthusiast or just curious, this is the perfect event to get involved. Food is provided.",
+      date: "2025-03-26T18:30:00+13:00",
+      location: "Room 401-418, Engineering Building",
+      eventTag: "General",
+      isPast: true,
+      signupUrl:
+        "https://docs.google.com/forms/d/e/1FAIpQLSd440Xqe9W9kJg9uz_wCxYllLlovrPLmzTWFY-GVTEhQ0PTEA/viewform?usp=header",
+    },
+    {
+      title: "Rocket Lab Talk",
+      slug: "rocket-lab-talk-2025",
+      description:
+        "The UoA Rocketry Club is excited to bring members our Rocket Lab Talk. Join other rocketry enthusiasts and enjoy a presentation from speakers at Rocket Lab. Members were invited to help decide what topics would be covered. This is a member-exclusive event with limited capacity due to room booking and catering.",
+      date: "2025-04-28T18:00:00+12:00",
+      location: "Room 401-401, Engineering Building",
+      eventTag: "Industry Talk",
+      isPast: true,
+      signupUrl: "https://events.humanitix.com/rocket-lab-talk",
+    },
+    {
+      title: "Project Direction Club Meeting",
+      slug: "project-direction-club-meeting-2025",
+      description:
+        "Club meeting focused on the big projects currently in progress, including Level 2/3 builds, altitude builds, hybrid motor development, and more. Members were encouraged to come along if they were keen to get involved or simply curious about what the teams were working on.",
+      date: "2025-05-01T18:00:00+12:00",
+      location: "Zoom",
+      eventTag: "General",
+      isPast: true,
+      signupUrl:
+        "https://zoom.us/j/99328652608?pwd=SanSSNbP4ERnZLsS7G2PkQvb5sXJFs.1",
+    },
+    {
+      title: "Level 1 Build Workshop: OpenRocket Session",
+      slug: "l1-build-workshop-openrocket-2025",
+      description:
+        "First Level 1 lab session for confirmed participants. The workshop covers essential admin and group info, then moves into OpenRocket simulation. Members learn how to check stability, centre of gravity, and centre of pressure, all before launch-focused build work begins.",
+      date: "2025-05-23T16:00:00+12:00",
+      location: "Engineering Building",
+      eventTag: "L1 Build",
+      isPast: true,
+      signupUrl: null,
+    },
+    {
+      title: "Report Workshop",
+      slug: "report-workshop-july-2025",
+      description:
+        "Report workshop session focused on checking off reports and sharing general announcements. This followed report submission deadlines and gave members a dedicated block of time to finalise simulation/report requirements and align on the next build stages.",
+      date: "2025-07-25T16:00:00+12:00",
+      location: "Rooms 405-326 / 405-328",
+      eventTag: "L1 Build",
+      isPast: true,
+      signupUrl: null,
+    },
+    {
+      title: "Makerspace Sewing Inductions",
+      slug: "makerspace-sewing-inductions-2025",
+      description:
+        "Build workshops to begin parachute construction, including sewing machine induction and a general guide for sewing chutes. Due to space limits, teams nominated attendees per group and completed health and safety quizzes beforehand. Workshop attendance covered induction and setup, with chute completion continuing in members' own time.",
+      date: "2025-07-29T09:00:00+12:00",
+      location: "Makers Space, Engineering Building",
+      eventTag: "L1 Build",
+      isPast: true,
+      signupUrl:
+        "https://events.humanitix.com/makerspace-sewing-inductions-scaa6qbx",
+    },
+    {
+      title: "Matariki Launchpad: Pathways into Aerospace",
+      slug: "matariki-launchpad-pathways-into-aerospace-2025",
+      description:
+        "Aerospace Auckland's Matariki Launchpad event for students and early-career professionals interested in internships and careers in Aotearoa's growing aerospace sector. The evening included talks from industry leaders on aerospace pathways and entry-level opportunities, plus student and professional networking over light kai.",
+      date: "2025-07-31T17:30:00+12:00",
+      location: "GridAKL, Wynyard Quarter",
+      eventTag: "Industry Talk",
+      isPast: true,
+      signupUrl:
+        "https://www.eventbrite.com/e/matariki-launchpad-pathways-into-aerospace-tickets-1479104604689?aff=ebdssbdestsearch",
+    },
+    {
+      title: "L1 Laser Cutting Workshop",
+      slug: "l1-laser-cutting-workshop-2025",
+      description:
+        "Second build workshop focused on making fins by laser cutting. Teams nominated attendees for limited-capacity sessions and were required to have files prepared before attending. Booking instructions and preparation guidance were provided ahead of workshop dates.",
+      date: "2025-08-15T11:00:00+12:00",
+      location: "405-221 MDLS Laser Cutter",
+      eventTag: "L1 Build",
+      isPast: true,
+      signupUrl: "https://events.humanitix.com/l1-laser-cutting-build-workshop",
+    },
+    {
+      title: "L1 3D Printing Workshop",
+      slug: "l1-3d-printing-workshop-2025",
+      description:
+        "Third build workshop focused on making nose cones with 3D printing. Teams nominated attendees for limited sessions and converted CAD files to STL before attending. Members were told nose cone shoulders would be provided separately and only the required parts needed printing.",
+      date: "2025-08-27T14:00:00+12:00",
+      location: "405-347 MDLS 3D Printers",
+      eventTag: "L1 Build",
+      isPast: true,
+      signupUrl: "https://events.humanitix.com/l1-3d-printing-build-workshop",
+    },
+    {
+      title: "Final Build Workshop: Epoxy & Assembly",
+      slug: "final-build-workshop-epoxy-assembly-2025",
+      description:
+        "Final build workshop for epoxy and assembly in MDLS Wet & Clean labs with provided PPE and proper ventilation. Teams were required to have all 3D printed and laser-cut parts completed before attending. If required parts were not ready, teams could not assemble and therefore could not proceed to launch readiness.",
+      date: "2025-09-19T11:00:00+12:00",
+      location: "405-122 MDLS Wet & Clean Lab",
+      eventTag: "L1 Build",
+      isPast: true,
+      signupUrl: "https://events.humanitix.com/l1-epoxy-and-assembly-workshop",
+    },
+    {
+      title: "UARC AGM 2025",
+      slug: "uarc-agm-2025",
+      description:
+        "Annual General Meeting including the Presidents' address, Treasurer's financial report, and voting for the club's next president. Members were reminded that each member has one vote and invited to apply for leadership roles through the provided application form.",
+      date: "2025-10-01T17:30:00+13:00",
+      location: "401-401, Engineering Building",
+      eventTag: "General",
+      isPast: true,
+      signupUrl:
+        "https://docs.google.com/forms/d/e/1FAIpQLSdhpRiGsY2gbCmXrp3lDM67_IzZ79xqhQ8chJqgkp7TFx6eIA/viewform?usp=header",
+    },
+    {
+      title: "FSAE x UAC x UARC Pub Quiz",
+      slug: "fsae-uac-uarc-pub-quiz-2025",
+      description:
+        "Cross-club pub quiz with FSAE, UAC, and UARC featuring rockets, cars, and planes. Entry was free for eligible club members with a drinks tab included, and prizes were provided by sponsors. Members were encouraged to sign up with friends and compete for bragging rights.",
+      date: "2025-10-03T18:30:00+13:00",
+      location: "Shadows",
+      eventTag: "Social",
+      isPast: true,
+      signupUrl:
+        "https://events.humanitix.com/fsae-x-uac-x-uarc-pub-quiz?fbclid=PAVERFWAM-11RleHRuA2FlbQIxMAABpwHF00gEFVKRtJ3Z999ZpPH8TJB0j2BJLSC-eo2HjaKaG3-Ii2Ku-qHq2P3e_aem_Ip-oEqe7T4BMc15DclxSyw",
+    },
+    {
+      title: "Rocket Motor Talk with Dr Malcolm Snowdon",
+      slug: "rocket-motor-talk-dr-malcolm-snowdon-2025",
+      description:
+        "Open talk hosted with UoA Aeronautics Club and the Royal Aeronautical Society, featuring Dr Malcolm Snowdon from Snowdon Consulting Ltd. The session covered rocket motors and broader aerospace consulting work including launch vehicle development, orbital analysis, feasibility studies, and hardware prototyping. No sign-up or membership requirement was needed.",
+      date: "2025-10-20T12:00:00+13:00",
+      location: "401-401",
+      eventTag: "Industry Talk",
+      isPast: true,
+      signupUrl: null,
+    },
+    {
+      title: "UARC Launch Night 2026",
+      slug: "uarc-launch-night-2026",
+      description:
+        "Launch Night to kick off the year, where members can learn about the club, meet the exec team, and hear about projects, workshops, and launches planned ahead. The event also outlined ways to get involved in build pathways as preparations progress toward AURC 2026. Food was provided and members were invited to RSVP.",
+      date: "2026-03-13T18:30:00+13:00",
+      location: "Room 405-460, Engineering Building",
+      eventTag: "General",
+      isPast: false,
+      signupUrl: "https://forms.gle/1nGVSzsKXdXCBYLk9",
+    },
   ];
-  const locations = [
-    "Engineering Building Lab 2",
-    "University Sports Field",
-    "Mechatronics Workshop",
-    "Innovation Hub Auditorium",
-    "Aerospace Collaboration Space",
-    "Launch Preparation Hangar",
-  ];
-  const descriptions = [
-    "An open session for members to build practical rocketry skills and collaborate on active projects.",
-    "Hands-on activities focused on systems readiness, safety checks, and mission execution.",
-    "A team event to test subsystems, review performance, and plan next design iterations.",
-    "Join mentors and student leads for technical demonstrations, reviews, and networking.",
-  ];
-
-  return Array.from({ length: count }, (_, i) => {
-    const isPast = i < Math.floor(count * 0.55);
-    const dayOffset = isPast
-      ? -(14 + i * 11)
-      : 7 + (i - Math.floor(count * 0.55)) * 12;
-    const date = daysFromNow(dayOffset);
-    const title = `${pick(eventTypes, i)} ${date.getUTCFullYear()} #${(i % 4) + 1}`;
-
-    return {
-      title,
-      slug: slugify(title),
-      description: pick(descriptions, i),
-      date: date.toISOString(),
-      location: pick(locations, i * 2 + 1),
-      isPast,
-      signupUrl: isPast
-        ? null
-        : `https://forms.gle/uarc-event-${slugify(title).slice(0, 24)}`,
-    };
-  });
 }
 
 async function main() {
@@ -438,12 +555,43 @@ async function main() {
       );
     }
 
-    const eventItems = generateEventData(16);
+    const eventItems = generateEventData();
     for (const item of eventItems) {
       const action = await upsertByUnique("Event", "slug", item);
       console.log(
         `${action === "created" ? "✅" : "🔁"} ${action} Event: ${item.title}`,
       );
+    }
+
+    const keepSlugs = new Set(eventItems.map((event) => event.slug));
+    const { data: existingEvents, error: existingEventsError } = await supabase
+      .from("Event")
+      .select("id,slug");
+
+    if (existingEventsError) {
+      throw new Error(
+        `Failed listing existing events for cleanup: ${existingEventsError.message}`,
+      );
+    }
+
+    const staleEventIds = (existingEvents ?? [])
+      .filter((event) => !keepSlugs.has(event.slug))
+      .map((event) => event.id)
+      .filter((id): id is number => typeof id === "number");
+
+    if (staleEventIds.length > 0) {
+      const { error: deleteError } = await supabase
+        .from("Event")
+        .delete()
+        .in("id", staleEventIds);
+
+      if (deleteError) {
+        throw new Error(`Failed deleting stale events: ${deleteError.message}`);
+      }
+
+      console.log(`🧹 deleted ${staleEventIds.length} stale Event rows.`);
+    } else {
+      console.log("🧹 no stale Event rows found.");
     }
 
     console.log("🎉 Seeding completed successfully.");

@@ -20,6 +20,7 @@ export type EventSummary = {
   slug: string;
   description?: string | null;
   date: string;
+  eventTag?: string | null;
   signupUrl?: string | null;
   isPast?: boolean;
   location?: string | null;
@@ -100,14 +101,18 @@ export const getEventsOverview = unstable_cache(
     const [upcomingResult, pastResult] = await Promise.all([
       supabase
         .from("Event")
-        .select("id,title,slug,description,date,signupUrl,isPast,location")
+        .select(
+          "id,title,slug,description,date,eventTag,signupUrl,isPast,location",
+        )
         .eq("isPast", false)
         .gte("date", nowIso)
         .order("date", { ascending: true })
         .limit(10),
       supabase
         .from("Event")
-        .select("id,title,slug,description,date,signupUrl,isPast,location")
+        .select(
+          "id,title,slug,description,date,eventTag,signupUrl,isPast,location",
+        )
         .or(pastFilter)
         .order("date", { ascending: false })
         .limit(10),
