@@ -15,20 +15,35 @@ type Props = {
 };
 
 export default function ExecCard({ exec, centered = false, className = "" }: Props) {
-  const base = `bg-background rounded-lg p-6 border border-accent ${centered ? "text-center" : ""} ${className}`.trim();
-
   return (
-    <div className={base}>
-      <div className="mb-4">
-        <img
-          src={exec.photo || ""}
-          alt={exec.name}
-          className="w-32 h-32 rounded-full mx-auto object-cover border-2 border-accent"
-        />
+    <div
+      className={`group relative bg-card rounded-xl p-6 border border-border transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 ${
+        centered ? "text-center" : ""
+      } ${className}`.trim()}
+    >
+      {/* Photo with hover effect */}
+      <div className="relative mb-5 inline-block">
+        <div className="relative w-28 h-28 mx-auto rounded-full overflow-hidden border-2 border-border group-hover:border-primary/50 transition-all duration-300">
+          <img
+            src={exec.photo || ""}
+            alt={exec.name}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </div>
+        {/* Decorative ring */}
+        <div className="absolute inset-0 rounded-full border-2 border-primary/30 scale-110 opacity-0 group-hover:opacity-100 transition-all duration-300" />
       </div>
-      <h3 className="text-xl font-bold text-primary mb-2">{exec.name}</h3>
-      {exec.role ? <p className="text-accent font-semibold mb-3">{exec.role}</p> : null}
-      {exec.bio ? <p className="text-text-secondary text-sm leading-relaxed">{exec.bio}</p> : null}
+
+      <h3 className="text-lg font-semibold text-text-main mb-1 group-hover:text-primary transition-colors duration-200">
+        {exec.name}
+      </h3>
+      {exec.role && (
+        <p className="text-primary text-sm font-medium mb-3">{exec.role}</p>
+      )}
+      {exec.bio && (
+        <p className="text-text-secondary text-sm leading-relaxed">{exec.bio}</p>
+      )}
     </div>
   );
 }

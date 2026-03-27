@@ -15,29 +15,37 @@ export default async function RocketsPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background pb-16 text-text-main">
-      <section className="bg-background pt-16 pb-8 px-4">
-        <div className="max-w-7xl mx-auto text-left">
-          <h1 className="text-5xl font-extrabold mb-4 text-primary">
-            Our Rockets
-          </h1>
+    <main className="min-h-screen bg-background text-text-main">
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-16 px-4 bg-background overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <p className="text-primary text-sm font-medium uppercase tracking-wider mb-3">Our Fleet</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Our Rockets</h1>
           <p className="text-lg text-text-secondary max-w-2xl">
-            Explore our rocket projects and achievements!
+            Explore our rocket projects and engineering achievements. Each rocket represents countless hours of design, testing, and innovation by our team members.
           </p>
         </div>
       </section>
 
-      <section className="bg-surface py-16 px-4">
+      {/* Rockets Grid Section */}
+      <section className="py-24 px-4 bg-surface relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 gap-8">
-            {rockets.length === 0 ? (
-              <SectionFallback align="left" />
-            ) : (
-              rockets.map((rocket: RocketItem, idx: number) => (
+          {rockets.length === 0 ? (
+            <SectionFallback 
+              title="No rockets yet"
+              description="Our rocket projects will appear here soon. Stay tuned!"
+            />
+          ) : (
+            <div className="grid grid-cols-1 gap-6">
+              {rockets.map((rocket: RocketItem, idx: number) => (
                 <Link
                   key={rocket.id}
                   href={`/rockets/${rocket.slug}`}
-                  className="block h-full"
+                  className="block"
                 >
                   <Card
                     image={rocket.image ?? ""}
@@ -51,8 +59,37 @@ export default async function RocketsPage() {
                     reverse={idx % 2 === 1}
                   />
                 </Link>
-              ))
-            )}
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-24 px-4 bg-background relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+        <div className="max-w-2xl mx-auto">
+          <div className="relative bg-card rounded-2xl p-10 text-center border border-border overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
+            <div className="relative z-10">
+              <h2 className="text-2xl md:text-3xl font-bold text-text-main mb-3">
+                Want to Build Rockets?
+              </h2>
+              <p className="text-text-secondary mb-8 max-w-md mx-auto">
+                Join our team and contribute to the next generation of student-built rockets.
+              </p>
+              <Link
+                href="https://docs.google.com/forms/d/e/1FAIpQLSfS7PS--UX-fQinUfuYzVLV3-rM92cW7uVFOqoEVczgYLb8Qg/viewform?usp=sf_link"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-primary/20"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Join UARC
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

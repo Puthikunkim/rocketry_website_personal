@@ -12,7 +12,6 @@ export default async function AboutPage() {
   let executives: Exec[] = [];
   let execsError = false;
 
-  // Start empty and show section-level fallbacks if missing
   let whatWeDo: AboutPayload["whatWeDo"] = [];
   let journey: AboutPayload["journey"] = [];
   let teamStructure: AboutPayload["teamStructure"] = [];
@@ -40,40 +39,43 @@ export default async function AboutPage() {
     : null;
 
   return (
-    <main className="min-h-screen bg-background text-text-main pt-20">
+    <main className="min-h-screen bg-background text-text-main">
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center pb-24 px-4 bg-background relative overflow-hidden">
-        <div className="relative z-10 w-full mx-auto">
+      <section className="relative pt-24 pb-16 px-4 bg-background overflow-hidden">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+        <div className="max-w-7xl mx-auto">
           {teamImageUrl ? (
-            <div className="rounded-xl shadow-2xl w-full sm:w-11/12 lg:w-3/4 mx-auto overflow-hidden">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
               <Image
                 src={teamImageUrl}
                 alt="UARC Team"
                 width={2160}
                 height={1215}
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 92vw, 800px"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 92vw, 1200px"
                 priority
-                className="w-full h-auto object-cover max-w-none rounded-xl"
+                className="w-full h-auto object-cover"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
             </div>
           ) : (
-            <div className="rounded-xl shadow-2xl w-full sm:w-11/12 lg:w-3/4 mx-auto bg-gray-800 h-72" />
+            <div className="rounded-2xl bg-surface h-72 md:h-96" />
           )}
         </div>
       </section>
 
       {/* What Do We Do Section */}
-      <section className="py-16 px-4 bg-surface">
+      <section className="py-24 px-4 bg-surface relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-extrabold mb-4">What Do We Do?</h2>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-              We offer a variety of activities to help students learn, network,
-              and grow in the field of rocketry
+          <div className="text-center mb-16">
+            <p className="text-primary text-sm font-medium uppercase tracking-wider mb-3">Our Activities</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">What Do We Do?</h2>
+            <p className="text-text-secondary max-w-xl mx-auto">
+              We offer a variety of activities to help students learn, network, and grow in the field of rocketry.
             </p>
           </div>
           {whatWeDo.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {whatWeDo.map((w, idx) => (
                 <FeatureCard
                   key={idx}
@@ -87,22 +89,24 @@ export default async function AboutPage() {
               ))}
             </div>
           ) : (
-            <SectionFallback className="col-span-full" />
+            <SectionFallback />
           )}
         </div>
       </section>
 
       {/* History Section */}
-      <section className="py-16 px-4 bg-background">
+      <section className="py-24 px-4 bg-background relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-extrabold mb-4">Our Journey</h2>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-              From humble beginnings to launching rockets that reach new heights
+          <div className="text-center mb-16">
+            <p className="text-primary text-sm font-medium uppercase tracking-wider mb-3">Our Story</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Journey</h2>
+            <p className="text-text-secondary max-w-xl mx-auto">
+              From humble beginnings to launching rockets that reach new heights.
             </p>
           </div>
           {journey.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {journey.map((j, idx) => (
                 <FeatureCard
                   key={idx}
@@ -115,46 +119,50 @@ export default async function AboutPage() {
               ))}
             </div>
           ) : (
-            <SectionFallback className="col-span-full" />
+            <SectionFallback />
           )}
         </div>
       </section>
 
       {/* Executive Team Section */}
-      <section className="py-16 px-4 bg-surface">
+      <section className="py-24 px-4 bg-surface relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-extrabold mb-4">Our Executive Team</h2>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-              Meet the dedicated leaders driving UARC forward with their passion
-              for rocketry and aerospace engineering
+          <div className="text-center mb-16">
+            <p className="text-primary text-sm font-medium uppercase tracking-wider mb-3">Meet The Team</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Executive Team</h2>
+            <p className="text-text-secondary max-w-xl mx-auto">
+              Meet the dedicated leaders driving UARC forward with their passion for rocketry and aerospace engineering.
             </p>
           </div>
           {execsError ? (
             <SectionFallback
               title="Unable to load executive team"
-              description="We are having trouble fetching the executive team. Please try again later or contact us if the issue persists."
+              description="We are having trouble fetching the executive team. Please try again later."
             />
-          ) : null}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {executives.map((exec: Exec) => (
-              <ExecCard key={exec.id} exec={exec} centered={true} />
-            ))}
-          </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {executives.map((exec: Exec) => (
+                <ExecCard key={exec.id} exec={exec} centered={true} />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* Achievements Section */}
-      <section className="py-16 px-4 bg-background">
+      <section className="py-24 px-4 bg-background relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-extrabold mb-4">Our Achievements</h2>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-              Milestones that showcase our commitment to excellence in rocketry
+          <div className="text-center mb-16">
+            <p className="text-primary text-sm font-medium uppercase tracking-wider mb-3">By The Numbers</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Achievements</h2>
+            <p className="text-text-secondary max-w-xl mx-auto">
+              Milestones that showcase our commitment to excellence in rocketry.
             </p>
           </div>
           {stats.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {stats.map((s, idx) => (
                 <StatCard
                   key={idx}
@@ -166,22 +174,24 @@ export default async function AboutPage() {
               ))}
             </div>
           ) : (
-            <SectionFallback className="col-span-full" />
+            <SectionFallback />
           )}
         </div>
       </section>
 
       {/* Team Structure Section */}
-      <section className="py-16 px-4 bg-surface">
+      <section className="py-24 px-4 bg-surface relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-extrabold mb-4">Our Team Structure</h2>
-            <p className="text-lg text-text-secondary max-w-2xl mx-auto">
-              Organised teams working together to achieve our rocketry goals
+          <div className="text-center mb-16">
+            <p className="text-primary text-sm font-medium uppercase tracking-wider mb-3">How We Work</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Team Structure</h2>
+            <p className="text-text-secondary max-w-xl mx-auto">
+              Organised teams working together to achieve our rocketry goals.
             </p>
           </div>
           {teamStructure.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {teamStructure.map((t, idx) => (
                 <FeatureCard
                   key={idx}
@@ -189,52 +199,60 @@ export default async function AboutPage() {
                   variant={t.variant as "surface" | "background"}
                 >
                   <p className="mb-4">{t.body}</p>
-                  {t.bullets ? (
+                  {t.bullets && (
                     <ul className="text-text-secondary text-sm space-y-2">
                       {t.bullets.map((b, i) => (
-                        <li key={i}>• {b}</li>
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="text-primary mt-1">
+                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 8 8">
+                              <circle cx="4" cy="4" r="3" />
+                            </svg>
+                          </span>
+                          {b}
+                        </li>
                       ))}
                     </ul>
-                  ) : null}
+                  )}
                 </FeatureCard>
               ))}
             </div>
           ) : (
-            <SectionFallback className="col-span-full" />
+            <SectionFallback />
           )}
         </div>
       </section>
 
       {/* Call to Action Section */}
-      <section className="py-16 px-4 bg-background">
+      <section className="py-24 px-4 bg-background relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="max-w-2xl mx-auto">
-          <div
-            className="bg-surface rounded-xl p-8 text-center border border-accent shadow-md"
-            style={{ backgroundColor: "#232323" }}
-          >
-            <h2 className="text-2xl font-bold text-primary mb-2">
-              Ready to Join?
-            </h2>
-            <p className="text-text-secondary mb-4">
-              Whether you&apos;re an experienced engineer or just starting your
-              journey in aerospace, there&apos;s a place for you in UARC. Join
-              us in pushing the boundaries of student rocketry!
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link
-                href="https://docs.google.com/forms/d/e/1FAIpQLSfS7PS--UX-fQinUfuYzVLV3-rM92cW7uVFOqoEVczgYLb8Qg/viewform?usp=sf_link"
-                className="button bg-primary text-white px-6 py-3 font-bold hover:bg-[#a94425] transition-all duration-200"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Become a Member
-              </Link>
-              <Link
-                href="/events"
-                className="button bg-primary text-white px-6 py-3 font-bold hover:bg-[#a94425] transition-all duration-200"
-              >
-                Attend an Event
-              </Link>
+          <div className="relative bg-card rounded-2xl p-10 text-center border border-border overflow-hidden">
+            {/* Decorative gradient */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />
+            
+            <div className="relative z-10">
+              <h2 className="text-2xl md:text-3xl font-bold text-text-main mb-3">
+                Ready to Join?
+              </h2>
+              <p className="text-text-secondary mb-8 max-w-md mx-auto">
+                Whether you&apos;re an experienced engineer or just starting your journey in aerospace, there&apos;s a place for you in UARC.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSfS7PS--UX-fQinUfuYzVLV3-rM92cW7uVFOqoEVczgYLb8Qg/viewform?usp=sf_link"
+                  className="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-primary/20"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Become a Member
+                </Link>
+                <Link
+                  href="/events"
+                  className="bg-transparent border border-border hover:border-primary/50 text-text-main hover:text-primary px-6 py-3 rounded-lg font-semibold transition-all duration-200"
+                >
+                  Attend an Event
+                </Link>
+              </div>
             </div>
           </div>
         </div>
