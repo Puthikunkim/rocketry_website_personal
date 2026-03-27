@@ -16,6 +16,7 @@
   --color-primary-light: #d96a47;
   --color-primary-dark: #a94425;
   --color-primary-glow: rgba(194, 86, 50, 0.15);
+  --color-primary-foreground: #ffffff;
   
   /* Accent colors */
   --color-accent: #E0E0E0;
@@ -90,14 +91,18 @@ a:hover, a:focus {
 }
 
 /* Ensure primary background buttons have white text */
-.bg-primary {
+[class*="bg-primary"] {
   color: #ffffff !important;
 }
-.bg-primary:hover,
-.bg-primary-dark {
+[class*="bg-primary"]:hover {
   color: #ffffff !important;
 }
-.hover\:bg-primary-dark:hover {
+
+/* Force white text on elements with primary background color */
+a[class*="bg-primary"],
+button[class*="bg-primary"],
+.bg-\[\#C25632\],
+[style*="background"][style*="C25632"] {
   color: #ffffff !important;
 }
 
