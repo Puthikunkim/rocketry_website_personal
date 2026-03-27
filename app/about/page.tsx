@@ -39,6 +39,18 @@ export default async function AboutPage() {
     ? `${SUPABASE_STORAGE_BASE.replace(/\/$/, "")}/${encodePath(TEAM_IMAGE_PATH)}`
     : null;
 
+  const WHAT_WE_DO_IMAGES = [
+    "/images/cards/design-build.jpg",
+    "/images/cards/launch-compete.jpg",
+    "/images/cards/learn-grow.jpg",
+  ];
+
+  const JOURNEY_IMAGES = [
+    "/images/cards/founded.jpg",
+    "/images/cards/first-launch.jpg",
+    "/images/cards/growing.jpg",
+  ];
+
   return (
     <main className="min-h-screen bg-background text-text-main">
       {/* Hero Section */}
@@ -82,6 +94,8 @@ export default async function AboutPage() {
                 <FeatureCard
                   key={idx}
                   icon={w.icon}
+                  image={WHAT_WE_DO_IMAGES[idx]}
+                  imageAlt={w.title}
                   title={w.title}
                   centered={true}
                   variant={w.variant as "background" | "surface"}
@@ -113,6 +127,8 @@ export default async function AboutPage() {
                 <FeatureCard
                   key={idx}
                   icon={j.icon}
+                  image={JOURNEY_IMAGES[idx]}
+                  imageAlt={j.title}
                   title={j.title}
                   variant={j.variant as "background" | "surface"}
                 >

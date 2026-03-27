@@ -1,7 +1,10 @@
 import React from "react";
+import Image from "next/image";
 
 type Props = {
   icon?: React.ReactNode | string;
+  image?: string;
+  imageAlt?: string;
   title?: React.ReactNode;
   subtitle?: React.ReactNode;
   children?: React.ReactNode;
@@ -15,6 +18,8 @@ type Props = {
 
 export default function FeatureCard({
   icon,
+  image,
+  imageAlt = "",
   title,
   subtitle,
   children,
@@ -30,33 +35,50 @@ export default function FeatureCard({
 
   return (
     <Tag
-      className={`group relative ${bg} rounded-xl p-6 border border-border transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 ${
+      className={`group relative ${bg} rounded-xl border border-border transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 overflow-hidden ${
         centered ? "text-center" : ""
       } ${className}`.trim()}
       href={href}
       aria-label={ariaLabel}
     >
       {/* Subtle top accent line */}
-      <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      
-      {icon && (
-        <div className={`inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary text-2xl mb-4 transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-105 ${centered ? "mx-auto" : ""}`}>
-          {icon}
+      <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10" />
+
+      {/* Card image */}
+      {image && (
+        <div className="relative w-full h-44 overflow-hidden">
+          <Image
+            src={image}
+            alt={imageAlt || (typeof title === "string" ? title : "")}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 33vw"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
         </div>
       )}
-      {title && (
-        <h3 className="text-lg font-semibold text-text-main mb-3 group-hover:text-primary transition-colors duration-200">
-          {title}
-        </h3>
-      )}
-      {subtitle && (
-        <p className="text-text-secondary mb-3">{subtitle}</p>
-      )}
-      {children && (
-        <div className="text-text-secondary text-sm leading-relaxed">
-          {children}
-        </div>
-      )}
+
+      <div className="p-6">
+        {/* Emoji icon fallback (only shown if no image) */}
+        {!image && icon && (
+          <div className={`inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary text-2xl mb-4 transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-105 ${centered ? "mx-auto" : ""}`}>
+            {icon}
+          </div>
+        )}
+        {title && (
+          <h3 className="text-lg font-semibold text-text-main mb-3 group-hover:text-primary transition-colors duration-200">
+            {title}
+          </h3>
+        )}
+        {subtitle && (
+          <p className="text-text-secondary mb-3">{subtitle}</p>
+        )}
+        {children && (
+          <div className="text-text-secondary text-sm leading-relaxed">
+            {children}
+          </div>
+        )}
+      </div>
     </Tag>
   );
 }
