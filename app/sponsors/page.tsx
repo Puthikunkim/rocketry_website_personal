@@ -1,6 +1,5 @@
 import React from "react";
 import SponsorCard from "@/components/ui/sponsor-card";
-import SectionSeparator from "@/components/SectionSeparator";
 import { getSponsors, type Sponsor } from "@/lib/site-data";
 
 export default async function SponsorsPage() {
@@ -82,10 +81,6 @@ export default async function SponsorsPage() {
 
       {tierSections.map((tier, idx) => (
         <React.Fragment key={tier.key}>
-          <SectionSeparator
-            variant={((idx % 4) + 1) as 1 | 2 | 3 | 4}
-            className={idx === 0 ? "mt-4" : ""}
-          />
           <section
             className={`py-16 px-4 ${idx % 2 === 0 ? "bg-surface" : "bg-background"}`}
           >
@@ -106,7 +101,6 @@ export default async function SponsorsPage() {
       ))}
 
       {/* Contact */}
-      {tierSections.length > 0 && <SectionSeparator variant={4} />}
       <section className="bg-background py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <div

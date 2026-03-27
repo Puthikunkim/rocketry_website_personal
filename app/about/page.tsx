@@ -4,7 +4,6 @@ import FeatureCard from "../../components/FeatureCard";
 import ExecCard from "../../components/ExecCard";
 import StatCard from "../../components/StatCard";
 import SectionFallback from "../../components/SectionFallback";
-import SectionSeparator from "../../components/SectionSeparator";
 import { getAboutPayload, type AboutPayload, type Exec } from "@/lib/site-data";
 
 export const revalidate = 300;
@@ -63,8 +62,6 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <SectionSeparator variant={1} />
-
       {/* What Do We Do Section */}
       <section className="py-16 px-4 bg-surface">
         <div className="max-w-7xl mx-auto">
@@ -95,8 +92,6 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <SectionSeparator variant={2} />
-
       {/* History Section */}
       <section className="py-16 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
@@ -125,8 +120,6 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <SectionSeparator variant={3} />
-
       {/* Executive Team Section */}
       <section className="py-16 px-4 bg-surface">
         <div className="max-w-7xl mx-auto">
@@ -150,8 +143,6 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
-
-      <SectionSeparator variant={4} />
 
       {/* Achievements Section */}
       <section className="py-16 px-4 bg-background">
@@ -179,8 +170,6 @@ export default async function AboutPage() {
           )}
         </div>
       </section>
-
-      <SectionSeparator variant={1} />
 
       {/* Team Structure Section */}
       <section className="py-16 px-4 bg-surface">
@@ -215,8 +204,6 @@ export default async function AboutPage() {
           )}
         </div>
       </section>
-
-      <SectionSeparator variant={2} />
 
       {/* Call to Action Section */}
       <section className="py-16 px-4 bg-background">

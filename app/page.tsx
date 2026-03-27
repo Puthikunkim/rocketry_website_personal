@@ -3,7 +3,6 @@ import Link from "next/link";
 import Card from "../components/ui/card";
 import SectionFallback from "../components/SectionFallback";
 import QuickNavCard from "../components/QuickNavCard";
-import SectionSeparator from "../components/SectionSeparator";
 import { getEventsOverview, getRocketSummaries } from "@/lib/site-data";
 
 type Rocket = {
@@ -80,8 +79,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <SectionSeparator variant={1} />
-
       {/* Featured Rockets Section */}
       <section className="py-16 px-4 bg-surface">
         <div className="max-w-7xl mx-auto">
@@ -126,8 +123,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      <SectionSeparator variant={2} />
 
       {/* Latest Events Section */}
       <section className="py-16 px-4 bg-background">
@@ -174,8 +169,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <SectionSeparator variant={3} />
-
       {/* Sponsors Section */}
       <section className="py-16 px-4 bg-surface">
         <div className="max-w-7xl mx-auto flex items-center justify-center">
@@ -196,8 +189,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      <SectionSeparator variant={4} />
 
       {/* Quick Navigation Section */}
       <section className="py-16 px-4 bg-background">

@@ -1,6 +1,5 @@
 import Card from "../../components/ui/card";
 import SectionFallback from "../../components/SectionFallback";
-import SectionSeparator from "../../components/SectionSeparator";
 import Link from "next/link";
 import { getRocketSummaries, type RocketSummary } from "@/lib/site-data";
 
@@ -27,8 +26,6 @@ export default async function RocketsPage() {
           </p>
         </div>
       </section>
-
-      <SectionSeparator variant={1} />
 
       <section className="bg-surface py-16 px-4">
         <div className="max-w-7xl mx-auto">

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Card from "@/components/ui/card";
 import SectionFallback from "@/components/SectionFallback";
-import SectionSeparator from "@/components/SectionSeparator";
 import EventsTagFilter from "@/components/EventsTagFilter";
 import { getEventsOverview, type EventSummary } from "@/lib/site-data";
 
@@ -68,8 +67,6 @@ export default async function EventsPage({ searchParams }: EventsPageProps) {
         </div>
       </section>
 
-      <SectionSeparator variant={1} />
-
       <section className="bg-surface py-16 px-4">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold mb-4 text-primary">
@@ -107,8 +104,6 @@ export default async function EventsPage({ searchParams }: EventsPageProps) {
           )}
         </div>
       </section>
-
-      <SectionSeparator variant={2} />
 
       <section className="bg-background py-16 px-4">
         <div className="max-w-7xl mx-auto">
