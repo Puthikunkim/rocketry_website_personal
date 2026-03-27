@@ -25,24 +25,38 @@ export default function FeatureCard({
   href,
   ariaLabel,
 }: Props) {
-  const bg = variant === "surface" ? "bg-surface" : "bg-background";
-  const base = `${bg} rounded-lg p-6 border border-accent ${
-    centered ? "text-center" : ""
-  } ${className}`.trim();
+  const bg = variant === "surface" ? "bg-surface" : "bg-card";
   const Tag: React.ElementType = as;
 
   return (
-    <Tag className={base} href={href} aria-label={ariaLabel}>
-      {icon ? <div className="text-4xl mb-4">{icon}</div> : null}
-      {title ? (
-        <h3 className="text-xl font-bold text-primary mb-3">{title}</h3>
-      ) : null}
-      {subtitle ? <p className="text-text-secondary mb-3">{subtitle}</p> : null}
-      {children ? (
+    <Tag
+      className={`group relative ${bg} rounded-xl p-6 border border-border transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 ${
+        centered ? "text-center" : ""
+      } ${className}`.trim()}
+      href={href}
+      aria-label={ariaLabel}
+    >
+      {/* Subtle top accent line */}
+      <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      
+      {icon && (
+        <div className={`inline-flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary text-2xl mb-4 transition-all duration-300 group-hover:bg-primary/20 group-hover:scale-105 ${centered ? "mx-auto" : ""}`}>
+          {icon}
+        </div>
+      )}
+      {title && (
+        <h3 className="text-lg font-semibold text-text-main mb-3 group-hover:text-primary transition-colors duration-200">
+          {title}
+        </h3>
+      )}
+      {subtitle && (
+        <p className="text-text-secondary mb-3">{subtitle}</p>
+      )}
+      {children && (
         <div className="text-text-secondary text-sm leading-relaxed">
           {children}
         </div>
-      ) : null}
+      )}
     </Tag>
   );
 }

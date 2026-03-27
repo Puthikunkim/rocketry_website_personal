@@ -28,41 +28,28 @@ export default function EventsTagFilter({
     router.push(query ? `${pathname}?${query}` : pathname);
   };
 
+  const tags = ["all", ...allTags];
+
   return (
-    <div className="mt-6 max-w-xs">
-      <label
-        className="block text-sm text-text-secondary mb-2"
-        htmlFor="tag-filter"
-      >
-        Filter by tag
-      </label>
-      <select
-        id="tag-filter"
-        name="tag"
-        value={selectedTag}
-        onChange={(event) => handleTagChange(event.target.value)}
-        className="w-full border border-accent rounded-md px-3 py-2 text-text-main focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
-        style={{
-          backgroundColor: "#232323",
-          color: "#f5f5f5",
-        }}
-      >
-        <option
-          value="all"
-          style={{ backgroundColor: "#232323", color: "#f5f5f5" }}
-        >
-          All Tags
-        </option>
-        {allTags.map((eventTag) => (
-          <option
-            key={eventTag}
-            value={eventTag}
-            style={{ backgroundColor: "#232323", color: "#f5f5f5" }}
+    <div className="flex flex-wrap gap-2 mt-6">
+      {tags.map((tag) => {
+        const isActive = selectedTag === tag;
+        const label = tag === "all" ? "All Events" : tag;
+        
+        return (
+          <button
+            key={tag}
+            onClick={() => handleTagChange(tag)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+              isActive
+                ? "bg-primary text-white shadow-md shadow-primary/20"
+                : "bg-card border border-border text-text-secondary hover:text-text-main hover:border-primary/50"
+            }`}
           >
-            {eventTag}
-          </option>
-        ))}
-      </select>
+            {label}
+          </button>
+        );
+      })}
     </div>
   );
 }

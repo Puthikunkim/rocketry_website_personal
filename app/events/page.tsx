@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Card from "@/components/ui/card";
 import SectionFallback from "@/components/SectionFallback";
-import SectionSeparator from "@/components/SectionSeparator";
 import EventsTagFilter from "@/components/EventsTagFilter";
 import { getEventsOverview, type EventSummary } from "@/lib/site-data";
 
@@ -16,7 +15,6 @@ export default async function EventsPage({ searchParams }: EventsPageProps) {
   const selectedTag = typeof tag === "string" ? tag : "all";
 
   let events: EventLocal[] = [];
-
   let upcoming: EventLocal[] = [];
   let past: EventLocal[] = [];
 
@@ -54,44 +52,47 @@ export default async function EventsPage({ searchParams }: EventsPageProps) {
   const filteredPast = past.filter(filterByTag);
 
   return (
-    <main className="min-h-screen bg-background pb-16 text-text-main">
-      <section className="bg-background pt-16 pb-8 px-4">
-        <div className="max-w-7xl mx-auto text-left">
-          <h1 className="text-5xl font-extrabold mb-4 text-primary">Events</h1>
-          <p className="text-lg text-text-secondary max-w-2xl">
-            Discover and join our upcoming and past events! From launches to
-            workshops, our events are open to all members and enthusiasts. Stay
-            tuned for more updates and relive the highlights from our past
-            activities.
+    <main className="min-h-screen bg-background text-text-main">
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-16 px-4 bg-background overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl" />
+        </div>
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <p className="text-primary text-sm font-medium uppercase tracking-wider mb-3">Stay Connected</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Events</h1>
+          <p className="text-lg text-text-secondary max-w-2xl mb-8">
+            Discover and join our upcoming and past events! From launches to workshops, our events are open to all members and enthusiasts.
           </p>
           <EventsTagFilter selectedTag={selectedTag} allTags={allTags} />
         </div>
       </section>
 
-      <SectionSeparator variant={1} />
-
-      <section className="bg-surface py-16 px-4">
+      {/* Upcoming Events Section */}
+      <section className="py-24 px-4 bg-surface relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4 text-primary">
-            Upcoming Events
-          </h2>
+          <div className="mb-10">
+            <p className="text-primary text-sm font-medium uppercase tracking-wider mb-2">Coming Up</p>
+            <h2 className="text-2xl md:text-3xl font-bold">Upcoming Events</h2>
+          </div>
           {filteredUpcoming.length === 0 ? (
             <SectionFallback
               align="left"
-              title="No upcoming events right now"
+              title="No upcoming events"
               description={
                 selectedTag === "all"
                   ? "There are currently no future events scheduled. Check back soon."
-                  : "There are currently no future events for this tag. Try switching to All Tags or check back soon."
+                  : "No events match this filter. Try switching to All Tags."
               }
             />
           ) : (
-            <div className="grid gap-8 grid-cols-1 sm:grid-cols-2">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2">
               {filteredUpcoming.map((event: EventLocal) => (
                 <Link
                   key={event.id}
                   href={`/events/${event.slug}`}
-                  className="block h-full"
+                  className="block"
                 >
                   <Card
                     image={placeholder}
@@ -108,20 +109,23 @@ export default async function EventsPage({ searchParams }: EventsPageProps) {
         </div>
       </section>
 
-      <SectionSeparator variant={2} />
-
-      <section className="bg-background py-16 px-4">
+      {/* Past Events Section */}
+      <section className="py-24 px-4 bg-background relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold mb-4 text-primary">Past Events</h2>
+          <div className="mb-10">
+            <p className="text-text-muted text-sm font-medium uppercase tracking-wider mb-2">Archive</p>
+            <h2 className="text-2xl md:text-3xl font-bold">Past Events</h2>
+          </div>
           {filteredPast.length === 0 ? (
-            <SectionFallback align="left" />
+            <SectionFallback align="left" title="No past events" description="Past events will appear here." />
           ) : (
-            <div className="grid gap-8 grid-cols-1 sm:grid-cols-2">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2">
               {filteredPast.map((event: EventLocal) => (
                 <Link
                   key={event.id}
                   href={`/events/${event.slug}`}
-                  className="block h-full"
+                  className="block"
                 >
                   <Card
                     image={placeholder}
