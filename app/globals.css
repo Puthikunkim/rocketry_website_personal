@@ -89,6 +89,18 @@ a:hover, a:focus {
   box-shadow: 0 4px 12px var(--color-primary-glow);
 }
 
+/* Ensure primary background buttons have white text */
+.bg-primary {
+  color: #ffffff !important;
+}
+.bg-primary:hover,
+.bg-primary-dark {
+  color: #ffffff !important;
+}
+.hover\:bg-primary-dark:hover {
+  color: #ffffff !important;
+}
+
 /* Secondary/outline button */
 .button-secondary {
   background: transparent;
