@@ -96,7 +96,8 @@ export default function Footer() {
             <div className="mt-8">
               <Link
                 href="https://docs.google.com/forms/d/e/1FAIpQLSfS7PS--UX-fQinUfuYzVLV3-rM92cW7uVFOqoEVczgYLb8Qg/viewform?usp=sf_link"
-                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-primary/20"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-primary/20"
+                style={{ color: '#ffffff' }}
                 target="_blank"
                 rel="noopener noreferrer"
               >

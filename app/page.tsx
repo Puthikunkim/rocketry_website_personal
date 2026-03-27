@@ -68,7 +68,8 @@ export default async function HomePage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <Link
               href="https://docs.google.com/forms/d/e/1FAIpQLSfS7PS--UX-fQinUfuYzVLV3-rM92cW7uVFOqoEVczgYLb8Qg/viewform?usp=sf_link"
-              className="bg-primary hover:bg-primary-dark text-white text-base px-8 py-3.5 rounded-lg font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5"
+              className="bg-primary hover:bg-primary-dark text-base px-8 py-3.5 rounded-lg font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5 whitespace-nowrap"
+              style={{ color: '#ffffff' }}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -202,7 +203,8 @@ export default async function HomePage() {
           </p>
           <Link
             href="/sponsors"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-primary/20"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark px-6 py-3 rounded-lg font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-primary/20"
+            style={{ color: '#ffffff' }}
           >
             View Our Sponsors
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

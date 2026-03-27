@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
+// Server-only Supabase client
 if (typeof window !== "undefined") {
   throw new Error("lib/supabase.ts must only be imported on the server.");
 }
